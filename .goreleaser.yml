@@ -1,0 +1,17 @@
+project_name: bitset
+before:
+  hooks:
+    - go mod tidy
+snapshot:
+  name_template: "{{ .Tag }}"
+release:
+  draft: false
+  replace_existing_draft: true
+  prerelease: false
+  mode: append
+  header: |
+    ## Release {{ .Tag }} ({{ .Date }})
+    
+    See [CHANGELOG.md](CHANGELOG.md) for details.
+changelog:
+  disable: true

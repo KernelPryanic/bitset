@@ -1,0 +1,26 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/jwplayer/ssai-go
+options:
+  sort: "date"
+  header:
+    pattern: "^(\\w+)(?:\\(([^)]+)\\))?(?:!)?\\:[ \\t]*(.*)$"
+    pattern_maps:
+      - Type
+      - Scope
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGES
+  commit_groups:
+    title_maps:
+      feat: Features
+      fix: Bug Fixes
+      perf: Performance Improvements
+      refactor: Code Refactoring
+      chore: Chores
+      ci: CI/CD
+      docs: Documentation Updates
+      test: Test Updates

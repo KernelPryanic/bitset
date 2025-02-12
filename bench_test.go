@@ -9,14 +9,14 @@ import (
 // setupBenchmarkSets creates BitSets of various sizes for benchmarking
 func setupBenchmarkSets() (BitSet, BitSet) {
 	small := New()
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		if i%2 == 0 {
 			small.Add(i)
 		}
 	}
 
 	large := New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large.Add(i)
 		}
@@ -38,22 +38,6 @@ func BenchmarkNew(b *testing.B) {
 			}
 		})
 	}
-}
-
-func BenchmarkBitSet_Reset(b *testing.B) {
-	small, large := setupBenchmarkSets()
-
-	b.Run("small set", func(b *testing.B) {
-		for b.Loop() {
-			small.Reset()
-		}
-	})
-
-	b.Run("large set", func(b *testing.B) {
-		for b.Loop() {
-			large.Reset()
-		}
-	})
 }
 
 func BenchmarkBitSet_Add(b *testing.B) {
@@ -151,7 +135,7 @@ func BenchmarkBitSet_DeleteRange(b *testing.B) {
 func BenchmarkAnd(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -176,7 +160,7 @@ func BenchmarkAnd(b *testing.B) {
 func BenchmarkBitSet_And(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -201,7 +185,7 @@ func BenchmarkBitSet_And(b *testing.B) {
 func BenchmarkOr(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -226,7 +210,7 @@ func BenchmarkOr(b *testing.B) {
 func BenchmarkBitSet_Or(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -251,7 +235,7 @@ func BenchmarkBitSet_Or(b *testing.B) {
 func BenchmarkXor(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -276,7 +260,7 @@ func BenchmarkXor(b *testing.B) {
 func BenchmarkBitSet_Xor(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -298,12 +282,10 @@ func BenchmarkBitSet_Xor(b *testing.B) {
 	})
 }
 
-// --- NEW: Benchmarks for AND NOT ---
-
 func BenchmarkAndNot(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -335,7 +317,7 @@ func BenchmarkAndNot(b *testing.B) {
 func BenchmarkBitSet_AndNot(b *testing.B) {
 	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 	large1, large2 := New(), New()
-	for i := 0; i < 10000; i++ {
+	for i := range 10000 {
 		if i%2 == 0 {
 			large1.Add(i)
 		}
@@ -363,8 +345,6 @@ func BenchmarkBitSet_AndNot(b *testing.B) {
 		})
 	}
 }
-
-// -----------------------------------
 
 func BenchmarkBitSet_Copy(b *testing.B) {
 	small, large := setupBenchmarkSets()

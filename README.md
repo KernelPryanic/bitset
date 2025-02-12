@@ -1,4 +1,7 @@
-# ⚡ BitSet ⚡
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/gomods/athens.svg)](https://github.com/KernelPryanic/bitset)
+[![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
+
+# ⚡ **BitSet** ⚡
 
 This is a simple, though very fast, bitset implementation in Go derived from the [yourbasic/bit](github.com/yourbasic/bit) package.
 

@@ -27,7 +27,6 @@ jobs:
           # This information shouldn't be necessary for CI anyway.
           GOFLAGS: "-buildvcs=false"
         with:
-          version: v1.62.2
           # --concurrency 0 automatically matches Linux container CPU quota.
           args: --timeout 10m --concurrency 0
 

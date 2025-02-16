@@ -148,14 +148,23 @@ func TestBitSet_Size(t *testing.T) {
 		{"large", New(100, 200, 300), 3},
 		{"range 0 to 64", func() BitSet {
 			b := New()
-			b.AddRange(0, 64) // adds 0..63
+			b.AddRange(0, 64)
 			return b
 		}(), 64},
 		{"range 1 to 64", func() BitSet {
 			b := New()
-			b.AddRange(1, 64) // adds 1..63
+			b.AddRange(1, 64)
 			return b
 		}(), 63},
+		{
+			name: "range 0 to 576",
+			bs: func() BitSet {
+				b := New()
+				b.AddRange(0, 576)
+				return b
+			}(),
+			expect: 576,
+		},
 	}
 
 	for _, tt := range tests {

@@ -258,10 +258,7 @@ func TestBitSet_Visit(t *testing.T) {
 		count := 0
 		aborted := bs.Visit(func(n int) bool {
 			count++
-			if n == 1 {
-				return true
-			}
-			return false
+			return n == 1
 		})
 		require.True(t, aborted)
 		require.Equal(t, 1, count)
@@ -539,30 +536,6 @@ func TestOr(t *testing.T) {
 	}
 }
 
-func TestBitSet_Or(t *testing.T) {
-	tests := []struct {
-		name   string
-		a, b   BitSet
-		expect string
-	}{
-		{"both empty", New(), New(), "{}"},
-		{"a empty", New(), New(1), "{1}"},
-		{"b empty", New(1), New(), "{1}"},
-		{"same", New(1), New(1), "{1}"},
-		{"no overlap", New(1), New(2), "{1 2}"},
-		{"partial overlap", New(1, 2), New(2, 3), "{1..3}"},
-		{"large", New(100, 200), New(200, 300), "{100 200 300}"},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			res := &tt.a
-			res.Or(tt.b)
-			require.Equal(t, tt.expect, res.String())
-		})
-	}
-}
-
 func TestXor(t *testing.T) {
 	tests := []struct {
 		name   string
@@ -572,40 +545,29 @@ func TestXor(t *testing.T) {
 		{"both empty", New(), New(), "{}"},
 		{"a empty", New(), New(1), "{1}"},
 		{"b empty", New(1), New(), "{1}"},
-		{"same", New(1), New(1), "{}"},
+		{"equal", New(1), New(1), "{}"},
+		{"2 elems equal", New(1, 2), New(1, 2), "{}"},
 		{"no overlap", New(1), New(2), "{1 2}"},
 		{"partial overlap", New(1, 2), New(2, 3), "{1 3}"},
-		{"large", New(100, 200), New(200, 300), "{100 300}"},
+		{"partial overlap trailing zero", New(1, 2, 0), New(2, 3, 0), "{1 3}"},
+		{"partial overlap hundrets", New(100, 200), New(200, 300), "{100 300}"},
+		{
+			"20 elems no overlap",
+			New(1, 100, 200, 300, 400, 500, 600, 700, 800, 900),
+			New(2, 101, 202, 303, 404, 505, 606, 707, 808, 909),
+			"{1 2 100 101 200 202 300 303 400 404 500 505 600 606 " +
+				"700 707 800 808 900 909}",
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			res := Xor(tt.a, tt.b)
 			require.Equal(t, tt.expect, res.String())
-		})
-	}
-}
 
-func TestBitSet_Xor(t *testing.T) {
-	tests := []struct {
-		name   string
-		a, b   BitSet
-		expect string
-	}{
-		{"both empty", New(), New(), "{}"},
-		{"a empty", New(), New(1), "{1}"},
-		{"b empty", New(1), New(), "{1}"},
-		{"same", New(1), New(1), "{}"},
-		{"no overlap", New(1), New(2), "{1 2}"},
-		{"partial overlap", New(1, 2), New(2, 3), "{1 3}"},
-		{"large", New(100, 200), New(200, 300), "{100 300}"},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			res := &tt.a
-			res.Xor(tt.b)
-			require.Equal(t, tt.expect, res.String())
+			cp := tt.a.Copy()
+			cp.Xor(tt.b)
+			require.Equal(t, tt.expect, cp.String())
 		})
 	}
 }

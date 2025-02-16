@@ -258,26 +258,47 @@ func BenchmarkXor(b *testing.B) {
 }
 
 func BenchmarkBitSet_Xor(b *testing.B) {
-	small1, small2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
-	large1, large2 := New(), New()
-	for i := range 10000 {
-		if i%2 == 0 {
-			large1.Add(i)
-		}
-		if i%3 == 0 {
-			large2.Add(i)
-		}
-	}
-
-	b.Run("small sets", func(b *testing.B) {
+	b.Run("empty", func(b *testing.B) {
+		s1, s2 := New(), New()
 		for b.Loop() {
-			small1.Xor(small2)
+			s1.Xor(s2)
 		}
 	})
 
-	b.Run("large sets", func(b *testing.B) {
+	b.Run("5", func(b *testing.B) {
+		s1, s2 := New(1, 2, 3, 4, 5), New(3, 4, 5, 6, 7)
 		for b.Loop() {
-			large1.Xor(large2)
+			s1.Xor(s2)
+		}
+	})
+
+	b.Run("10k", func(b *testing.B) {
+		s1, s2 := New(), New()
+		for i := range 10_000 {
+			switch {
+			case i%2 == 0:
+				s1.Add(i)
+			case i%3 == 0:
+				s2.Add(i)
+			}
+		}
+		for b.Loop() {
+			s1.Xor(s2)
+		}
+	})
+
+	b.Run("1m", func(b *testing.B) {
+		s1, s2 := New(), New()
+		for i := range 1_000_000 {
+			switch {
+			case i%2 == 0:
+				s1.Add(i)
+			case i%3 == 0:
+				s2.Add(i)
+			}
+		}
+		for b.Loop() {
+			s1.Xor(s2)
 		}
 	})
 }

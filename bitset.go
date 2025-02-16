@@ -393,7 +393,7 @@ func Or(s1, s2 BitSet) BitSet {
 		return BitSet{}
 	}
 	if otherLen == 0 { // s2 is empty, return a copy of s1 with trailing zeros removed
-		var last = bsLen - 1
+		last := bsLen - 1
 		for last >= 0 && s1[last] == 0 {
 			last--
 		}
@@ -468,8 +468,27 @@ func (bs *BitSet) Xor(other BitSet) {
 	if len(other) > len(*bs) {
 		bs.resize(len(other))
 	}
-	for i := 0; i < len(other); i++ {
-		(*bs)[i] ^= other[i]
+	if len(other) < 8 {
+		for i := range other {
+			(*bs)[i] ^= other[i]
+		}
+		bs.trim()
+		return
+	}
+
+	b := *bs
+	for ; len(other) > 7; b, other = b[8:], other[8:] {
+		(b)[0] ^= other[0]
+		(b)[1] ^= other[1]
+		(b)[2] ^= other[2]
+		(b)[3] ^= other[3]
+		(b)[4] ^= other[4]
+		(b)[5] ^= other[5]
+		(b)[6] ^= other[6]
+		(b)[7] ^= other[7]
+	}
+	for i := range other {
+		b[i] ^= other[i]
 	}
 	bs.trim()
 }
